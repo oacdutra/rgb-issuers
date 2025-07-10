@@ -85,7 +85,7 @@ pub fn fungible() -> CompiledLib {
     let shared = shared_lib().into_lib().lib_id();
 
     let mut code = uasm! {
-     routine FN_FUNGIBLE_ISSUE:
+    routine FN_FUNGIBLE_ISSUE:
         call    shared, FN_ASSET_SPEC;// Call asset check
 
         put     E1, ERRNO_PRECISION_OVERFLOW; // Set error code for the case of failure
@@ -125,7 +125,7 @@ pub fn fungible() -> CompiledLib {
         clr     E1;             // Clear the error code
         ret;
 
-     routine FN_FUNGIBLE_TRANSFER:
+    routine FN_FUNGIBLE_TRANSFER:
         // Verify that no global state is defined
         call    shared, FN_GLOBAL_ABSENT;
 
@@ -140,12 +140,12 @@ pub fn fungible() -> CompiledLib {
         clr     E1;             // Clear the error code
         ret;
 
-     proc FN_FUNGIBLE_SUM_INPUTS:
+    proc FN_FUNGIBLE_SUM_INPUTS:
         put     E2, 0;          // Set initial sum to zero
         put     EH, O_AMOUNT;   // Set EH to the field element representing the owned value
         rsti    destructible;   // Start iteration over inputs
 
-     label LOOP_INPUTS:
+      label LOOP_INPUTS:
         ldi     destructible;   // load next state value
 
         // Finish if no more elements are present
@@ -174,12 +174,12 @@ pub fn fungible() -> CompiledLib {
 
         jmp     LOOP_INPUTS;    // loop
 
-     proc FN_FUNGIBLE_SUM_OUTPUTS:
+    proc FN_FUNGIBLE_SUM_OUTPUTS:
         put     E3, 0;          // Set initial sum to zero
         put     EH, O_AMOUNT;   // Set EH to the field element representing the owned value
         rsto    destructible;   // Start iteration over outputs
 
-     label LOOP_OUTPUTS:
+      label LOOP_OUTPUTS:
         ldo     destructible;   // load next state value
 
         // Finish if no more elements are present

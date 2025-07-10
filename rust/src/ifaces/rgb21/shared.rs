@@ -31,7 +31,7 @@ use crate::{
     ERRNO_FRACTIONALITY, ERRNO_INVALID_PRECISION, ERRNO_INVALID_TOKEN_ID, ERRNO_NO_INPUT,
     ERRNO_NO_NAME, ERRNO_NO_OUTPUT, ERRNO_NO_PRECISION, ERRNO_NO_TICKER, ERRNO_NO_TOKEN_ID,
     ERRNO_TOKEN_EXCESS, ERRNO_TOKEN_EXCESS_IN, ERRNO_TOKEN_EXCESS_OUT, ERRNO_UNEXPECTED_GLOBAL_IN,
-    ERRNO_UNEXPECTED_GLOBAL_OUT, ERRNO_UNEXPECTED_OWNED_IN, G_NAME, G_PRECISION, G_SUPPLY,
+    ERRNO_UNEXPECTED_GLOBAL_OUT, ERRNO_UNEXPECTED_OWNED_IN, G_NAME, G_NFT, G_PRECISION, G_SUPPLY,
     G_TICKER, O_AMOUNT,
 };
 
@@ -71,11 +71,19 @@ pub fn api(codex_id: CodexId) -> Api {
                 raw_convertor: RawConvertor::StrictDecode(SemId::unit()),
                 raw_builder: RawBuilder::StrictEncode(SemId::unit())
             },
+            vname!("maxTokens") => GlobalApi {
+                published: true,
+                sem_id: types.get("RGB21.TokenFractions"),
+                convertor: StateConvertor::TypedEncoder(G_SUPPLY),
+                builder: StateBuilder::TypedEncoder(G_SUPPLY),
+                raw_convertor: RawConvertor::StrictDecode(SemId::unit()),
+                raw_builder: RawBuilder::StrictEncode(SemId::unit())
+            },
             vname!("token") => GlobalApi {
                 published: true,
                 sem_id: types.get("RGB21.TokenNo"),
-                convertor: StateConvertor::TypedFieldEncoder(G_SUPPLY),
-                builder: StateBuilder::TypedFieldEncoder(G_SUPPLY),
+                convertor: StateConvertor::TypedFieldEncoder(G_NFT),
+                builder: StateBuilder::TypedFieldEncoder(G_NFT),
                 raw_convertor: RawConvertor::StrictDecode(types.get("RGB21.NftSpec")),
                 raw_builder: RawBuilder::StrictEncode(types.get("RGB21.NftSpec"))
             },
@@ -93,6 +101,7 @@ pub fn api(codex_id: CodexId) -> Api {
         aggregators: tiny_bmap! {
             vname!("name") => Aggregator::Take(SubAggregator::TheOnly(vname!("name"))),
             vname!("ticker") => Aggregator::Take(SubAggregator::TheOnly(vname!("ticker"))),
+            vname!("baseUrl") => Aggregator::Take(SubAggregator::TheOnly(vname!("baseUrl"))),
             vname!("count") => Aggregator::Take(SubAggregator::CountUnique(vname!("token"))),
             vname!("tokens") => Aggregator::Take(SubAggregator::MapV2U(vname!("token"))),
         },

@@ -385,7 +385,7 @@ mod tests {
                 StateData::new(G_DETAILS, 0u8),
                 StateData::new(G_NAME, 0u8),
                 StateData::new(G_PRECISION, TOKEN_FRACTIONS),
-                StateData::new(G_SUPPLY, TOKEN_ID),
+                StateData::new(G_NFT, TOKEN_ID),
             ],
         };
         let (lib, mut vm, resolver) = harness();
